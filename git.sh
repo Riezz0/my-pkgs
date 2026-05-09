@@ -12,26 +12,28 @@ else
     exit 1
 fi
 
-# 1. Remove any existing backup files and symlinks
-echo "Cleaning up old database files..."
-rm -f *.old
+# 1. Remove any existing database files, symlinks, and ALL variations of .old files
+echo "Cleaning up old database files and backups..."
+# This removes the symlinks and any file ending in .old or .old.gz
 rm -f "$REPO_NAME.db" "$REPO_NAME.files"
+rm -f *.old *.old.gz *.old.tar.gz
 
 # 2. Update the database 
-# -n (or --new) tells repo-add to not create .old backup files
+# The -n flag prevents repo-add from creating NEW .old files during this run
 echo "Updating the repository database..."
 repo-add -n "$REPO_NAME.db.tar.gz" *.pkg.tar.zst
 
 # 3. Fix for GitHub Pages (replacing symlinks with actual files)
+# We remove the symlink names first to ensure 'cp' creates a fresh file
 echo "Generating static files for GitHub Pages..."
-rm my-pkgs.db 
-rm my-pkgs.files
-rm my-pkgs.db.tar.gz.old
-rm my-pkgs.files.tar.gz.old
+rm -f "$REPO_NAME.db" "$REPO_NAME.files"
 cp "$REPO_NAME.db.tar.gz" "$REPO_NAME.db"
 cp "$REPO_NAME.files.tar.gz" "$REPO_NAME.files"
 
-# 4. Git operations
+# 4. Final Cleanup (Safety pass to catch anything repo-add might have dropped)
+rm -f *.old *.old.gz
+
+# 5. Git operations
 echo "Syncing with GitHub..."
 cd ..
 git add .
