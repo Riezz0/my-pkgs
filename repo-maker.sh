@@ -24,8 +24,8 @@ mv my-pkgs.files.tar.zst my-pkgs.files
 
 # - Remove Backups
 #
-rm my-pkgs.db.tar.zst.old
-rm my-pkgs.files.tar.zst.old
+#rm my-pkgs.db.tar.zst.old
+#rm my-pkgs.files.tar.zst.old
 
 # - Push The Repo To Github
 #
