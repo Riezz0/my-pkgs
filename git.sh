@@ -24,6 +24,10 @@ repo-add -n "$REPO_NAME.db.tar.gz" *.pkg.tar.zst
 
 # 3. Fix for GitHub Pages (replacing symlinks with actual files)
 echo "Generating static files for GitHub Pages..."
+rm my-pkgs.db 
+rm my-pkgs.files
+rm my-pkgs.db.tar.gz.old
+rm my-pkgs.files.tar.gz.old
 cp "$REPO_NAME.db.tar.gz" "$REPO_NAME.db"
 cp "$REPO_NAME.files.tar.gz" "$REPO_NAME.files"
 
